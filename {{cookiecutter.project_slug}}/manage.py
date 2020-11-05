@@ -1,6 +1,7 @@
 import subprocess
 
 import typer
+import os
 import uvicorn
 from tortoise import Tortoise
 
@@ -48,7 +49,7 @@ def update_dep():
 
 @cmd.command(help="test")
 def test():
-    subprocess.call(["pytest", "--disable-warnings", "-v", "--cov=./", "--cov-report=xml"])
+    subprocess.call(["pytest"], env={"ENV": "test", **os.environ})
     subprocess.call(["coverage", "html"])
 
 
