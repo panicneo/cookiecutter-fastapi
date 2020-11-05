@@ -4,8 +4,8 @@
 #
 #    pip-compile --index-url=https://mirrors.aliyun.com/pypi/simple/ --no-emit-index-url --output-file=requirements/production.txt requirements/production.in
 #
-aerich==0.3.2             # via -r requirements/production.in
-aiosqlite==0.15.0         # via tortoise-orm
+aerich==0.3.2             # via -r requirements/production.in, tortoise-orm
+aiosqlite==0.16.0         # via tortoise-orm
 asyncpg==0.21.0           # via -r requirements/production.in
 certifi==2020.6.20        # via httpx, requests, sentry-sdk
 chardet==3.0.4            # via requests
@@ -18,22 +18,22 @@ httptools==0.1.1          # via uvicorn
 httpx==0.16.1             # via -r requirements/production.in
 idna==2.10                # via requests, rfc3986
 iso8601==0.1.13           # via tortoise-orm
-pydantic==1.6.1           # via -r requirements/production.in, aerich, fastapi
-pypika==0.42.1            # via tortoise-orm
-python-dotenv==0.14.0     # via uvicorn
+pydantic==1.7.2           # via -r requirements/production.in, aerich, fastapi
+pypika==0.43.0            # via tortoise-orm
+python-dotenv==0.15.0     # via uvicorn
 python-multipart==0.0.5   # via -r requirements/production.in
 pyyaml==5.3.1             # via uvicorn
 requests==2.24.0          # via -r requirements/production.in
 rfc3986[idna2008]==1.4.0  # via httpx
-sentry-sdk==0.19.1        # via -r requirements/production.in
+sentry-sdk==0.19.2        # via -r requirements/production.in
 six==1.15.0               # via python-multipart
 sniffio==1.2.0            # via httpcore, httpx
 starlette==0.13.6         # via fastapi
-tortoise-orm==0.16.16     # via -r requirements/production.in, aerich
+tortoise-orm==0.16.17     # via -r requirements/production.in, aerich
 typer==0.3.2              # via -r requirements/production.in
 typing-extensions==3.7.4.3  # via aiosqlite, tortoise-orm
-urllib3==1.25.10          # via requests, sentry-sdk
-uvicorn[standard]==0.12.1  # via -r requirements/production.in
+urllib3==1.25.11          # via requests, sentry-sdk
+uvicorn[standard]==0.12.2  # via -r requirements/production.in
 uvloop==0.14.0            # via uvicorn
 watchgod==0.6             # via uvicorn
 websockets==8.1           # via uvicorn
