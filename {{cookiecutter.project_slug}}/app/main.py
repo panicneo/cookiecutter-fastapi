@@ -1,5 +1,4 @@
 import logging
-import sys
 
 import sentry_sdk
 from fastapi import FastAPI
@@ -11,8 +10,9 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from tortoise.contrib.fastapi import register_tortoise
 from tortoise.exceptions import DoesNotExist, IntegrityError
+from app.utils.exceptions import APIException
 
-from app.controllers import animals
+from app import controllers
 from app.core import config
 
 logging.root.setLevel("INFO")
@@ -36,11 +36,16 @@ def create_app():
     )
     fast_app.add_middleware(ServerErrorMiddleware, debug=(config.settings.env == "local"))
     fast_app.add_middleware(GZipMiddleware)
-    fast_app.include_router(animals.router)
+    fast_app.include_router(controllers.router)
     return fast_app
 
 
 app = create_app()
+
+
+@app.exception_handler(APIException)
+async def eva_exception_handler(_: Request, exc: APIException):
+    return JSONResponse(status_code=exc.status_code, content={"message": exc.message})
 
 
 @app.exception_handler(DoesNotExist)
@@ -54,9 +59,10 @@ async def integrity_error_exception_handler(_: Request, exc: IntegrityError):  #
 
 
 if config.settings.env != "local":  # pragma: no cover
-    sentry_sdk.init(dsn=config.settings.sentry_dsn, environment=config.settings.env)
-    app.add_middleware(SentryAsgiMiddleware)
+    if config.settings.sentry_dsn:
+        sentry_sdk.init(dsn=config.settings.sentry_dsn, environment=config.settings.env)
+        app.add_middleware(SentryAsgiMiddleware)
 
-if sys.argv == ["manage.py", "runserver"] or sys.argv[0].endswith("gunicorn"):  # pragma: no cover
+if config.settings.env != "test":  # pragma: no cover
     logging.info("connecting to database...")
     register_tortoise(app, config=config.db_config)
