@@ -44,8 +44,8 @@ app = create_app()
 
 
 @app.exception_handler(APIException)
-async def eva_exception_handler(_: Request, exc: APIException):
-    return JSONResponse(status_code=exc.status_code, content={"message": exc.message})
+async def api_exception_handler(_: Request, exc: APIException):
+    return JSONResponse(status_code=exc.code, content={"message": exc.message})
 
 
 @app.exception_handler(DoesNotExist)
@@ -55,7 +55,10 @@ async def does_not_exist_exception_handler(_: Request, exc: DoesNotExist):
 
 @app.exception_handler(IntegrityError)
 async def integrity_error_exception_handler(_: Request, exc: IntegrityError):  # pragma: no cover
-    return JSONResponse(status_code=422, content={"detail": [{"loc": [], "msg": str(exc), "type": "IntegrityError"}]})
+    return JSONResponse(
+        status_code=422,
+        content={"detail": [{"loc": [], "msg": str(exc), "type": "IntegrityError"}]},
+    )
 
 
 if config.settings.env != "local":  # pragma: no cover
