@@ -9,7 +9,7 @@ from starlette.middleware.gzip import GZipMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from tortoise.contrib.fastapi import register_tortoise
-from tortoise.exceptions import DoesNotExist, IntegrityError
+from tortoise.exceptions import IntegrityError
 from app.utils.exceptions import APIException
 
 from app import controllers
@@ -48,11 +48,6 @@ async def api_exception_handler(_: Request, exc: APIException):
     return JSONResponse(status_code=exc.code, content={"message": exc.message})
 
 
-@app.exception_handler(DoesNotExist)
-async def does_not_exist_exception_handler(_: Request, exc: DoesNotExist):
-    return JSONResponse(status_code=404, content={"message": str(exc)})
-
-
 @app.exception_handler(IntegrityError)
 async def integrity_error_exception_handler(_: Request, exc: IntegrityError):  # pragma: no cover
     return JSONResponse(
@@ -61,10 +56,9 @@ async def integrity_error_exception_handler(_: Request, exc: IntegrityError):  #
     )
 
 
-if config.settings.env != "local":  # pragma: no cover
-    if config.settings.sentry_dsn:
-        sentry_sdk.init(dsn=config.settings.sentry_dsn, environment=config.settings.env)
-        app.add_middleware(SentryAsgiMiddleware)
+if config.settings.env != "local" and config.settings.sentry_dsn:
+    sentry_sdk.init(dsn=config.settings.sentry_dsn, environment=config.settings.env)
+    app.add_middleware(SentryAsgiMiddleware)
 
 if config.settings.env != "test":  # pragma: no cover
     logging.info("connecting to database...")

@@ -6,11 +6,11 @@ class TimestampModelMixin:
     updated_at = fields.DatetimeField(auto_now=True)
 
 
-class Animal(TimestampModelMixin, models.Model):
-    """用户 """
+class Demo(TimestampModelMixin, models.Model):
+    """Demo Model """
 
     id = fields.BigIntField(pk=True)
     name = fields.CharField(max_length=20)
 
     class Meta:
-        table = "animal"
+        table = "demo"

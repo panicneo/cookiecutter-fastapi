@@ -21,16 +21,6 @@ def runserver(
     uvicorn.run("app.main:app", reload=reload, host=host, port=port, workers=workers)
 
 
-@cmd.command(help="generate migration files")
-def makemigrations():
-    subprocess.call(["aerich", "migrate"])
-
-
-@cmd.command(help="do database migrate")
-def migrate():
-    subprocess.call(["aerich", "upgrade"])
-
-
 @cmd.command(help="update all dependencies' versions and apply in requirements folder")
 def update_dep():
     files = [
@@ -51,12 +41,6 @@ def update_dep():
                 file.replace(".in", ".txt"),
             ]
         )
-
-
-@cmd.command(help="test")
-def test():
-    subprocess.call(["pytest"], env={"ENV": "test", **os.environ})
-    subprocess.call(["coverage", "html"])
 
 
 @cmd.command(help="lint")

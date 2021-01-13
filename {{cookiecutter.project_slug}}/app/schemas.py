@@ -1,7 +1,7 @@
 import pydantic
 from tortoise.contrib.pydantic import pydantic_model_creator
 
-from app.models import Animal
+from app.models import Demo
 
 
 class Schema(pydantic.BaseModel):
@@ -10,4 +10,5 @@ class Schema(pydantic.BaseModel):
         anystr_strip_whitespace = True
 
 
-AnimalDetail = pydantic_model_creator(Animal)
+DemoDetail = pydantic_model_creator(Demo)
+DemoEdit = pydantic_model_creator(Demo, exclude_readonly=True)

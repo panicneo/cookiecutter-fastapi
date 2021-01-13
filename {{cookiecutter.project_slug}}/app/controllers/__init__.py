@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.controllers import animals
+from app.controllers import demo
 
 router = APIRouter()
-router.include(animals.router)
+router.include(demo.router)
